@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <%-include('partials/header') %>
+
+    <main>
+        <h2>Search Page</h2>
+        
+       
+        <form action="/search" method="GET">
+            <input type="text" name="q" placeholder="Search for items..." value="<%= searchTerm %>">
+            <button type="submit">Search</button>
+        </form>
+    
+        <% if (searchTerm) { %>
+            <p>Showing results for: "<%= searchTerm %>"</p>
+        <% } %>
+    
+      
+        <ul>
+            <% if (searchResults.length > 0) { %>
+                <% searchResults.forEach(result => { %>
+                    <li><%= result.name %> - <%= result.type %></li>
+                <% }) %>
+            <% } else { %>
+                <li>No results found for "<%= searchTerm %>"</li>
+            <% } %>
+        </ul>
+    </main>
+    
+    
+    
+
+</body>
+</html>
