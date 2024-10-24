@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Posts</title>
+</head>
+<body>
+    <h1>Blog Posts</h1>
+
+    <!-- Form to create a new post -->
+    <form action="/posts" method="POST">
+        <input type="text" name="title" placeholder="Post Title" required><br>
+        <textarea name="body" placeholder="Post Body" required></textarea><br>
+        <button type="submit">Add Post</button>
+    </form>
+
+    <!-- List of blog posts -->
+    <h2>All Posts</h2>
+    <ul>
+        <% if (posts.length > 0) { %>
+            <% posts.forEach(post => { %>
+                <li>
+                    <a href="/posts/<%= post.title %>"><%= post.title %></a>
+                </li>
+            <% }) %>
+        <% } else { %>
+            <li>No posts yet!</li>
+        <% } %>
+    </ul>
+</body>
+</html>

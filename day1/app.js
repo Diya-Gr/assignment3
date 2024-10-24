@@ -1,3 +1,4 @@
+// TASK  ---->1
 const express=require("express")
 const path=require("path")
 const app=express()
@@ -31,6 +32,30 @@ function getGreeting(time) {
         return "Good evening";
     }
 }
+
+//TASK --->2
+app.use(bodyParser.urlencoded({ extended: true }));
+let tasks = [];
+
+
+app.get('/todo', (req, res) => {
+    res.render('todo', { tasks: tasks });
+});
+
+
+app.post('/addtask', (req, res) => {
+    const newTask = req.body.task;
+    if (newTask) {
+        tasks.push(newTask);
+    }
+    res.redirect('/todo');
+});
+
+app.post('/deletetask', (req, res) => {
+    const index = req.body.index;
+    tasks.splice(index, 1);
+    res.redirect('/todo');
+});
 app.listen(PORT,(err)=>{
     if(err){
         console.log(err)

@@ -6,12 +6,12 @@ const PORT=8000
 app.set('view engine', 'ejs');
 
 
-//assignment 5
+//TASK--->5   -----------------------------------------------------------------------
 const items = [
     { name: 'Harry Potter', type: 'book' },
     { name: 'Avengers', type: 'movie' },
-    { name: 'Inception', type: 'movie' },
-    { name: 'The Hobbit', type: 'book' },
+    { name: 'Stree', type: 'movie' },
+    { name: 'The Helper', type: 'book' },
 ];
 
 
@@ -24,7 +24,34 @@ app.get('/search', (req, res) => {
 });
 
 
-//assignment 7
+// TASK  --->6 -----------------------------------------------------------------------------------------
+let posts = [];
+
+app.get('/posts', (req, res) => {
+    res.render('posts', { posts: posts });
+});
+app.post('/posts', (req, res) => {
+    const newPost = {
+        title: req.body.title,
+        body: req.body.body
+    };
+    posts.push(newPost);
+    res.redirect('/posts'); 
+});
+
+app.get('/posts/:title', (req, res) => {
+    const post = posts.find(p => p.title === req.params.title);
+    if (post) {
+        res.render('postDetails', { post: post });
+    } else {
+        res.status(404).send('Post not found');
+    }
+});
+
+
+
+
+// TASK--->7  -----------------------------------------------------------------------------
 app.set('views', path.join(__dirname, 'views'));
 let isLoggedIn = false;  
 
@@ -41,41 +68,4 @@ app.listen(PORT,(err)=>{
         console.log(`listening to ${PORT}`)
     }
 })
-
-
-
-
-
-
-
-
-
-
-// filepath=path.join(__dirname,"/views/index.ejs")
-// app.get("/",(req,res)=>{
-//     let naam="diya"
-//     let place="punjab"
-//     res.render(filepath,{naam,destination:place})
-// })
-
-// filepath1=path.join(__dirname,"/views/welcome.ejs")
-// app.get('/welcome', (req, res) => {
-//     const userName = req.query.name || "Guest"; 
-//     const currentTime = new Date();
-//     let greeting = getGreeting(currentTime);
-
-//     res.render('welcome', { name: userName, greeting });
-// });
-
-
-// function getGreeting(time) {
-//     const hour = time.getHours();
-//     if (hour < 12) {
-//         return "Good morning";
-//     } else if (hour < 18) {
-//         return "Good afternoon";
-//     } else {
-//         return "Good evening";
-//     }
-// }
 
