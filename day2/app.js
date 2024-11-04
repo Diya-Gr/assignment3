@@ -1,9 +1,11 @@
 const express=require("express")
 const path=require("path")
+const cors=require('cors')
 const app=express()
 app.use(express.json())
 const PORT=8000
 app.set('view engine', 'ejs');
+const multer = require('multer');
 
 
 //TASK--->5   -----------------------------------------------------------------------
@@ -58,6 +60,71 @@ let isLoggedIn = false;
 
 app.get('/', (req, res) => {
     res.render('index', { isLoggedIn });
+});
+
+
+ 
+// task --->8  -----------------------------------------------------------------------
+
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+app.get('/contact', (req, res) => {
+    res.render('contact', { error: null });
+});
+
+
+app.post('/contact', (req, res) => {
+    const { name, email, message } = req.body;
+
+    if (!name || !email || !message) {
+        return res.render('contact', { error: 'All fields are required!' });
+    }
+    res.render('thankyou', { name, email, message });
+});
+
+
+
+
+
+// TASK -->9  --------------------------------------------------------------------------
+
+const products = [
+    { name: 'Sample Product', description: 'A sample description.', image: 'images/sample.jpg' }
+];
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/images'); 
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + file.originalname); // Unique filename
+    }
+});
+const upload = multer({ storage });
+
+app.get('/upload', (req, res) => {
+    res.render('upload'); 
+});
+
+
+app.post('/upload', upload.single('productImage'), (req, res) => {
+  
+    const newProduct = {
+        name: req.body.name,
+        description: req.body.description,
+        image: 'images/' + req.file.filename+'.jpg'
+    };
+
+
+    products.push(newProduct);
+
+    res.redirect('/catalog');
+});
+
+app.get('/catalog', (req, res) => {
+    res.render('catalog', { products });
 });
 
 app.listen(PORT,(err)=>{
